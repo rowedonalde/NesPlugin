@@ -11,6 +11,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "NesTriangleGenerator.h"
+#include "NesTriangleWaveVoice.h"
+#include "NesTriangleWaveSound.h"
 #include "SampleGenerator.h"
 
 //==============================================================================
@@ -97,18 +99,33 @@ void NesPluginAudioProcessor::changeProgramName (int index, const String& newNam
 //==============================================================================
 void NesPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    sampleGenerators = new SampleGenerator*[getTotalNumOutputChannels()];
-    for (int i = 0; i < getTotalNumOutputChannels(); i++)
+    //sampleGenerators = new SampleGenerator*[getTotalNumOutputChannels()];
+    //for (int i = 0; i < getTotalNumOutputChannels(); i++)
+    //{
+    //    //sampleGenerators[i] = new SineGenerator(sampleRate, 10);
+    //    sampleGenerators[i] = new NesTriangleGenerator(sampleRate, 10);
+    //}
+
+    // Set up synth:
+    // Actually, I don't think we need a synth audio source here--
+    // we just need a synth.
+    //synthAudioSource.prepareToPlay(samplesPerBlock, sampleRate);
+
+    for (auto i = 0; i < 1; i++)
     {
-        //sampleGenerators[i] = new SineGenerator(sampleRate, 10);
-        sampleGenerators[i] = new NesTriangleGenerator(sampleRate, 10);
+        synth.addVoice (new NesTriangleWaveVoice());
     }
+
+    synth.addSound (new NesTriangleWaveSound());
+
+    synth.setCurrentPlaybackSampleRate (sampleRate);
 }
 
 void NesPluginAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    // TODO: destroy synths here?
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -138,8 +155,14 @@ bool NesPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 void NesPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
+    //auto totalNumInputChannels  = getTotalNumInputChannels();
+    //auto totalNumOutputChannels = getTotalNumOutputChannels();
+
+    // TODO: add synth routing. Rather than use "removeNextBlockOfMessages"
+    // on its own to pull the MidiBuffer, we should pass the midiMessages
+    // buffer to the synth here...
+    auto audioSourceChannelInfo = AudioSourceChannelInfo(buffer);
+    synth.renderNextBlock(buffer, midiMessages, audioSourceChannelInfo.startSample, buffer.getNumSamples());
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -147,8 +170,8 @@ void NesPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
+    //for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+    //    buffer.clear (i, 0, buffer.getNumSamples());
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -156,15 +179,19 @@ void NesPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        for (auto sample = 0; sample < buffer.getNumSamples(); sample++)
-        {
-            channelData[sample] = sampleGenerators[channel]->getNextSample() * masterGain;
-        }
-    }
+    //for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    //{
+    //    auto* channelData = buffer.getWritePointer (channel);
+    //
+    //    for (auto sample = 0; sample < buffer.getNumSamples(); sample++)
+    //    {
+    //        channelData[sample] = sampleGenerators[channel]->getNextSample() * masterGain;
+    //        // TODO ...then, we pull the generated samples from the synth here
+    //        // instead of pulling them directly from the sample generator.
+    //        // (Or could I just pass both the audio buffer to the synth, too,
+    //        // since I'm already doing so with the MidiBuffer?
+    //    }
+    //}
 }
 
 //==============================================================================

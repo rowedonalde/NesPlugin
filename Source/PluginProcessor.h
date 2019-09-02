@@ -67,6 +67,8 @@ private:
 
     double triangleFrequency = 1.0;
     double masterGain = 0.0;
+
+    Synthesiser synth;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NesPluginAudioProcessor)
 };

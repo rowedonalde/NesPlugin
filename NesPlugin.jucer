@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="GeKIoY" name="NesPlugin" projectType="audioplug" jucerVersion="5.4.3"
-              pluginFormats="buildAU,buildVST3">
+<JUCERPROJECT id="GeKIoY" name="NesPlugin" projectType="audioplug" jucerVersion="5.4.4"
+              pluginFormats="buildAU,buildVST3" companyName="A-Frame Personal Electronics"
+              version="0.1.0" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="HSKNKb" name="NesPlugin">
     <GROUP id="{42B85515-5C6F-4FFD-BDC5-00B02FC8E048}" name="Source">
+      <FILE id="PSuKCH" name="NesTriangleWaveSound.cpp" compile="1" resource="0"
+            file="Source/NesTriangleWaveSound.cpp"/>
+      <FILE id="OUvroL" name="NesTriangleWaveSound.h" compile="0" resource="0"
+            file="Source/NesTriangleWaveSound.h"/>
+      <FILE id="auMjtY" name="NesTriangleWaveVoice.cpp" compile="1" resource="0"
+            file="Source/NesTriangleWaveVoice.cpp"/>
+      <FILE id="gxOw32" name="NesTriangleWaveVoice.h" compile="0" resource="0"
+            file="Source/NesTriangleWaveVoice.h"/>
       <FILE id="w4nTvn" name="NesTriangleGenerator.cpp" compile="1" resource="0"
             file="Source/NesTriangleGenerator.cpp"/>
       <FILE id="KPGx9h" name="NesTriangleGenerator.h" compile="0" resource="0"

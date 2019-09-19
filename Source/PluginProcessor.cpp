@@ -10,6 +10,9 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "NesPwmGenerator.h"
+#include "NesPwmVoice.h"
+#include "NesPwmSound.h"
 #include "NesTriangleGenerator.h"
 #include "NesTriangleWaveVoice.h"
 #include "NesTriangleWaveSound.h"
@@ -28,6 +31,8 @@ NesPluginAudioProcessor::NesPluginAudioProcessor()
                        )
 #endif
 {
+    triangleSound = new NesTriangleWaveSound(splitKey);
+    pwmSound = new NesPwmSound(splitKey);
 }
 
 NesPluginAudioProcessor::~NesPluginAudioProcessor()
@@ -114,9 +119,13 @@ void NesPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     for (auto i = 0; i < 1; i++)
     {
         synth.addVoice (new NesTriangleWaveVoice());
+
+        synth.addVoice (new NesPwmVoice());
+        synth.addVoice (new NesPwmVoice());
     }
 
-    synth.addSound (new NesTriangleWaveSound());
+    synth.addSound (triangleSound);
+    synth.addSound (pwmSound);
 
     synth.setCurrentPlaybackSampleRate (sampleRate);
 }
@@ -155,43 +164,8 @@ bool NesPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 void NesPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     ScopedNoDenormals noDenormals;
-    //auto totalNumInputChannels  = getTotalNumInputChannels();
-    //auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    // TODO: add synth routing. Rather than use "removeNextBlockOfMessages"
-    // on its own to pull the MidiBuffer, we should pass the midiMessages
-    // buffer to the synth here...
     auto audioSourceChannelInfo = AudioSourceChannelInfo(buffer);
     synth.renderNextBlock(buffer, midiMessages, audioSourceChannelInfo.startSample, buffer.getNumSamples());
-
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
-    //for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-    //    buffer.clear (i, 0, buffer.getNumSamples());
-
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    //for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    //{
-    //    auto* channelData = buffer.getWritePointer (channel);
-    //
-    //    for (auto sample = 0; sample < buffer.getNumSamples(); sample++)
-    //    {
-    //        channelData[sample] = sampleGenerators[channel]->getNextSample() * masterGain;
-    //        // TODO ...then, we pull the generated samples from the synth here
-    //        // instead of pulling them directly from the sample generator.
-    //        // (Or could I just pass both the audio buffer to the synth, too,
-    //        // since I'm already doing so with the MidiBuffer?
-    //    }
-    //}
 }
 
 //==============================================================================
@@ -219,20 +193,17 @@ void NesPluginAudioProcessor::setStateInformation (const void* data, int sizeInB
     // whose contents will have been created by the getStateInformation() call.
 }
 
-double NesPluginAudioProcessor::getTriangleFrequency()
+int NesPluginAudioProcessor::getSplitKey()
 {
-    return triangleFrequency;
+    return splitKey;
 }
 
-void NesPluginAudioProcessor::setTriangleFrequency(double frequency)
+void NesPluginAudioProcessor::setSplitKey(int splitKey)
 {
-    triangleFrequency = frequency;
+    this->splitKey = splitKey;
 
-    // Set frequency on triangle generators:
-    for (auto i = 0; i < getTotalNumOutputChannels(); i++)
-    {
-        sampleGenerators[i]->setFrequency(triangleFrequency);
-    }
+    triangleSound->setSplitKey(splitKey);
+    pwmSound->setSplitKey(splitKey);
 }
 
 double NesPluginAudioProcessor::getMasterGain()

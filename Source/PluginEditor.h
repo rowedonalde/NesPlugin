@@ -36,8 +36,10 @@ private:
     Slider gainSlider;
     Label gainLabel;
 
-    Slider frequencySlider;
-    Label frequencyLabel;
+    //Slider frequencySlider;
+    //Label frequencyLabel;
+    Slider keyboardSplitSlider;
+    Label keyboardSplitLabel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NesPluginAudioProcessorEditor)
 };

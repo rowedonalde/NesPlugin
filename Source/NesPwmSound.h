@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    NesTriangleWaveSound.h
-    Created: 1 Sep 2019 10:56:47pm
+    NesPwmSound.h
+    Created: 10 Sep 2019 10:03:17pm
     Author:  Donald Rowe
 
   ==============================================================================
@@ -12,10 +12,10 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-struct NesTriangleWaveSound : public SynthesiserSound
+struct NesPwmSound : public SynthesiserSound
 {
 public:
-    NesTriangleWaveSound(int playNotesLessThan);
+    NesPwmSound(int playNotesGTE);
 
     bool appliesToNote (int midiNoteNumber) override;
     bool appliesToChannel (int) override;
@@ -23,5 +23,5 @@ public:
     void setSplitKey(int midiNoteNumber);
 
 private:
-    int playNotesLessThan;
+    int playNotesGTE;
 };

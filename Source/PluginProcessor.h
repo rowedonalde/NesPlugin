@@ -11,6 +11,8 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "NesTriangleWaveSound.h"
+#include "NesPwmSound.h"
 #include "SampleGenerator.h"
 
 //==============================================================================
@@ -56,16 +58,23 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    double getTriangleFrequency();
-    void setTriangleFrequency (double frequency);
+    //double getTriangleFrequency();
+    //void setTriangleFrequency (double frequency);
+
+    int getSplitKey();
+    void setSplitKey (int splitKey);
 
     double getMasterGain();
     void setMasterGain (double gain);
 
 private:
-    SampleGenerator** sampleGenerators;
+    //SampleGenerator** sampleGenerators;
 
-    double triangleFrequency = 1.0;
+    NesTriangleWaveSound* triangleSound;
+    NesPwmSound* pwmSound;
+
+    //double triangleFrequency = 1.0;
+    int splitKey = 60;
     double masterGain = 0.0;
 
     Synthesiser synth;

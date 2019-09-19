@@ -10,17 +10,22 @@
 
 #include "NesTriangleWaveSound.h"
 
-NesTriangleWaveSound::NesTriangleWaveSound()
+NesTriangleWaveSound::NesTriangleWaveSound(int playNotesLessThan)
 {
-
+    this->playNotesLessThan = playNotesLessThan;
 }
 
-bool NesTriangleWaveSound::appliesToNote(int)
+bool NesTriangleWaveSound::appliesToNote(int midiNoteNumber)
 {
-    return true;
+    return midiNoteNumber < playNotesLessThan;
 }
 
 bool NesTriangleWaveSound::appliesToChannel(int)
 {
     return true;
+}
+
+void NesTriangleWaveSound::setSplitKey(int midiNoteNumber)
+{
+    playNotesLessThan = midiNoteNumber;
 }

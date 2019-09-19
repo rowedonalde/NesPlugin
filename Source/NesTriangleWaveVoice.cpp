@@ -24,7 +24,10 @@ bool NesTriangleWaveVoice::canPlaySound(SynthesiserSound *sound)
 
 void NesTriangleWaveVoice::startNote(int midiNoteNumber, float velocity, SynthesiserSound *, int)
 {
-    nesTriangleGenerator.setFrequency (MidiMessage::getMidiNoteInHertz(midiNoteNumber));
+    // We step the apparent tone up two octaves to give the
+    // triangle voice more upper room in the keyboard split:
+    // TODO make the octaves configurable in the UI
+    nesTriangleGenerator.setFrequency (MidiMessage::getMidiNoteInHertz(midiNoteNumber) * 4);
     makeSound = true;
 }
 

@@ -5,6 +5,14 @@
               version="0.1.0" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="HSKNKb" name="NesPlugin">
     <GROUP id="{42B85515-5C6F-4FFD-BDC5-00B02FC8E048}" name="Source">
+      <FILE id="PBO5Wl" name="NesPwmSound.cpp" compile="1" resource="0" file="Source/NesPwmSound.cpp"/>
+      <FILE id="KSPu7l" name="NesPwmSound.h" compile="0" resource="0" file="Source/NesPwmSound.h"/>
+      <FILE id="Zl2AKv" name="NesPwmVoice.cpp" compile="1" resource="0" file="Source/NesPwmVoice.cpp"/>
+      <FILE id="KZMIFR" name="NesPwmVoice.h" compile="0" resource="0" file="Source/NesPwmVoice.h"/>
+      <FILE id="lxKSQf" name="NesPwmGenerator.cpp" compile="1" resource="0"
+            file="Source/NesPwmGenerator.cpp"/>
+      <FILE id="nCTM94" name="NesPwmGenerator.h" compile="0" resource="0"
+            file="Source/NesPwmGenerator.h"/>
       <FILE id="PSuKCH" name="NesTriangleWaveSound.cpp" compile="1" resource="0"
             file="Source/NesTriangleWaveSound.cpp"/>
       <FILE id="OUvroL" name="NesTriangleWaveSound.h" compile="0" resource="0"

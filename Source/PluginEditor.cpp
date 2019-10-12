@@ -16,20 +16,6 @@ NesPluginAudioProcessorEditor::NesPluginAudioProcessorEditor (NesPluginAudioProc
     : AudioProcessorEditor (&p), processor (p), valueTreeState(vts)
 {
     // Set up UI:
-//    gainSlider.setRange(0.0, 1.0, 1);
-//    gainSlider.setTextBoxStyle (Slider::TextBoxRight, false, 100, 20);
-//    gainLabel.setText ("Volume", dontSendNotification);
-
-//    keyboardSplitSlider.setRange(0, 127);
-//    keyboardSplitSlider.setTextBoxStyle(Slider::TextBoxRight, false, 100, 20);
-//    keyboardSplitSlider.setNumDecimalPlacesToDisplay(0);
-//    keyboardSplitLabel.setText("Split Key", dontSendNotification);
-
-//    addAndMakeVisible(gainSlider);
-//    addAndMakeVisible(gainLabel);
-//    addAndMakeVisible(keyboardSplitSlider);
-//    addAndMakeVisible(keyboardSplitLabel);
-
     keyboardSplitLabel.setText("Split Key", dontSendNotification);
     addAndMakeVisible(keyboardSplitLabel);
 

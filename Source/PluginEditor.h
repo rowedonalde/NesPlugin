@@ -33,12 +33,6 @@ private:
     NesPluginAudioProcessor& processor;
 
     AudioProcessorValueTreeState& valueTreeState;
-
-//    Slider gainSlider;
-//    Label gainLabel;
-
-    //Slider frequencySlider;
-    //Label frequencyLabel;
     Slider keyboardSplitSlider;
     Label keyboardSplitLabel;
     typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;

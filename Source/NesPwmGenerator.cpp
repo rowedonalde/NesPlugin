@@ -46,8 +46,6 @@ float NesPwmGenerator::getNextSample()
     }
 
     return y;
-
-    //return x * 2 - 1.0;
 }
 
 void NesPwmGenerator::setFrequency(double frequency)

@@ -61,21 +61,24 @@ public:
     //double getTriangleFrequency();
     //void setTriangleFrequency (double frequency);
 
-    int getSplitKey();
-    void setSplitKey (int splitKey);
-
-    double getMasterGain();
-    void setMasterGain (double gain);
+//    int getSplitKey();
+//    void setSplitKey (int splitKey);
+//
+//    double getMasterGain();
+//    void setMasterGain (double gain);
 
 private:
-    //SampleGenerator** sampleGenerators;
+    AudioProcessorValueTreeState parameters;
 
     NesTriangleWaveSound* triangleSound;
     NesPwmSound* pwmSound;
 
     //double triangleFrequency = 1.0;
-    int splitKey = 60;
+    //int splitKey = 60;
+    int previousSplitKey;
     double masterGain = 0.0;
+
+    float* splitKeyParameter = nullptr;
 
     Synthesiser synth;
     //==============================================================================

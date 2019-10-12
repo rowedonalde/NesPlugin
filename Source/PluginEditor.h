@@ -16,11 +16,10 @@
 //==============================================================================
 /**
 */
-class NesPluginAudioProcessorEditor  : public AudioProcessorEditor,
-                                       private Slider::Listener
+class NesPluginAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
-    NesPluginAudioProcessorEditor (NesPluginAudioProcessor&);
+    NesPluginAudioProcessorEditor (NesPluginAudioProcessor&, AudioProcessorValueTreeState&);
     ~NesPluginAudioProcessorEditor();
 
     //==============================================================================
@@ -28,18 +27,22 @@ public:
     void resized() override;
 
 private:
-    void sliderValueChanged (Slider* slider) override;
+    //void sliderValueChanged (Slider* slider) override;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     NesPluginAudioProcessor& processor;
 
-    Slider gainSlider;
-    Label gainLabel;
+    AudioProcessorValueTreeState& valueTreeState;
+
+//    Slider gainSlider;
+//    Label gainLabel;
 
     //Slider frequencySlider;
     //Label frequencyLabel;
     Slider keyboardSplitSlider;
     Label keyboardSplitLabel;
+    typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+    std::unique_ptr<SliderAttachment> keyboardSplitAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NesPluginAudioProcessorEditor)
 };

@@ -30,9 +30,6 @@ NesTriangleGenerator::NesTriangleGenerator(double sampleRate, double toneFrequen
     for (auto step = 0; step < NUM_WAVETABLE_STEPS; step++)
     {
         waveTable[NUM_WAVETABLE_STEPS + step] = waveTable[NUM_WAVETABLE_STEPS - step - 1];
-
-        // Trying this to avoid the flattened top and bottom of each cycle:
-        //waveTable[NUM_WAVETABLE_STEPS + step] = waveTable[NUM_WAVETABLE_STEPS - step - 1] + 2.0 / NUM_WAVETABLE_STEPS;
     }
 }
 

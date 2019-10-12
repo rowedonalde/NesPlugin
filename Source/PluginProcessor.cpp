@@ -20,8 +20,12 @@
 
 //==============================================================================
 NesPluginAudioProcessor::NesPluginAudioProcessor()
+    : parameters(*this, nullptr, Identifier ("NesPlugin"),
+                 {
+                     std::make_unique<AudioParameterInt>("splitKey", "Split Key", 0, 127, 60)
+                 })
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
+     , AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  AudioChannelSet::stereo(), true)
@@ -31,8 +35,11 @@ NesPluginAudioProcessor::NesPluginAudioProcessor()
                        )
 #endif
 {
-    triangleSound = new NesTriangleWaveSound(splitKey);
-    pwmSound = new NesPwmSound(splitKey);
+    splitKeyParameter = parameters.getRawParameterValue ("splitKey");
+
+    previousSplitKey = *splitKeyParameter;
+    triangleSound = new NesTriangleWaveSound(*splitKeyParameter);
+    pwmSound = new NesPwmSound(*splitKeyParameter);
 }
 
 NesPluginAudioProcessor::~NesPluginAudioProcessor()
@@ -104,18 +111,7 @@ void NesPluginAudioProcessor::changeProgramName (int index, const String& newNam
 //==============================================================================
 void NesPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    //sampleGenerators = new SampleGenerator*[getTotalNumOutputChannels()];
-    //for (int i = 0; i < getTotalNumOutputChannels(); i++)
-    //{
-    //    //sampleGenerators[i] = new SineGenerator(sampleRate, 10);
-    //    sampleGenerators[i] = new NesTriangleGenerator(sampleRate, 10);
-    //}
-
     // Set up synth:
-    // Actually, I don't think we need a synth audio source here--
-    // we just need a synth.
-    //synthAudioSource.prepareToPlay(samplesPerBlock, sampleRate);
-
     for (auto i = 0; i < 1; i++)
     {
         synth.addVoice (new NesTriangleWaveVoice());
@@ -165,6 +161,17 @@ void NesPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
 {
     ScopedNoDenormals noDenormals;
     auto audioSourceChannelInfo = AudioSourceChannelInfo(buffer);
+
+    // Listen for changes in the slider-controlled parameters:
+    int currentSplitKey = *splitKeyParameter;
+
+    if (currentSplitKey != previousSplitKey)
+    {
+        triangleSound->setSplitKey(currentSplitKey);
+        pwmSound->setSplitKey(currentSplitKey);
+        previousSplitKey = currentSplitKey;
+    }
+
     synth.renderNextBlock(buffer, midiMessages, audioSourceChannelInfo.startSample, buffer.getNumSamples());
 }
 
@@ -176,44 +183,27 @@ bool NesPluginAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* NesPluginAudioProcessor::createEditor()
 {
-    return new NesPluginAudioProcessorEditor (*this);
+    return new NesPluginAudioProcessorEditor (*this, parameters);
 }
 
 //==============================================================================
 void NesPluginAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    // Copy the state to the requested location in memory:
+    auto state = parameters.copyState();
+    std::unique_ptr<XmlElement> xml (state.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void NesPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
-}
+    // Copy the XML data into the parameter state iff the proper tag name exists:
+    std::unique_ptr<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
 
-int NesPluginAudioProcessor::getSplitKey()
-{
-    return splitKey;
-}
-
-void NesPluginAudioProcessor::setSplitKey(int splitKey)
-{
-    this->splitKey = splitKey;
-
-    triangleSound->setSplitKey(splitKey);
-    pwmSound->setSplitKey(splitKey);
-}
-
-double NesPluginAudioProcessor::getMasterGain()
-{
-    return masterGain;
-}
-
-void NesPluginAudioProcessor::setMasterGain(double gain)
-{
-    masterGain = gain;
+    if (xmlState.get() != nullptr && xmlState->hasTagName(parameters.state.getType()))
+    {
+        parameters.replaceState (ValueTree::fromXml (*xmlState));
+    }
 }
 
 //==============================================================================

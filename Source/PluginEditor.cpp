@@ -12,30 +12,30 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-NesPluginAudioProcessorEditor::NesPluginAudioProcessorEditor (NesPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
+NesPluginAudioProcessorEditor::NesPluginAudioProcessorEditor (NesPluginAudioProcessor& p, AudioProcessorValueTreeState& vts)
+    : AudioProcessorEditor (&p), processor (p), valueTreeState(vts)
 {
     // Set up UI:
-    gainSlider.setRange(0.0, 1.0, 1);
-    gainSlider.setTextBoxStyle (Slider::TextBoxRight, false, 100, 20);
-    gainLabel.setText ("Volume", dontSendNotification);
+//    gainSlider.setRange(0.0, 1.0, 1);
+//    gainSlider.setTextBoxStyle (Slider::TextBoxRight, false, 100, 20);
+//    gainLabel.setText ("Volume", dontSendNotification);
 
-    keyboardSplitSlider.setRange(0, 127);
-    keyboardSplitSlider.setTextBoxStyle(Slider::TextBoxRight, false, 100, 20);
-    keyboardSplitSlider.setNumDecimalPlacesToDisplay(0);
+//    keyboardSplitSlider.setRange(0, 127);
+//    keyboardSplitSlider.setTextBoxStyle(Slider::TextBoxRight, false, 100, 20);
+//    keyboardSplitSlider.setNumDecimalPlacesToDisplay(0);
+//    keyboardSplitLabel.setText("Split Key", dontSendNotification);
+
+//    addAndMakeVisible(gainSlider);
+//    addAndMakeVisible(gainLabel);
+//    addAndMakeVisible(keyboardSplitSlider);
+//    addAndMakeVisible(keyboardSplitLabel);
+
     keyboardSplitLabel.setText("Split Key", dontSendNotification);
-
-    addAndMakeVisible(gainSlider);
-    addAndMakeVisible(gainLabel);
-    addAndMakeVisible(keyboardSplitSlider);
     addAndMakeVisible(keyboardSplitLabel);
 
-    gainSlider.addListener(this);
-    keyboardSplitSlider.addListener(this);
-
-    // TODO set value via processor
-    gainSlider.setValue(p.getMasterGain());
-    keyboardSplitSlider.setValue(p.getSplitKey());
+    addAndMakeVisible(keyboardSplitSlider);
+    keyboardSplitSlider.setNumDecimalPlacesToDisplay(0);
+    keyboardSplitAttachment.reset (new SliderAttachment (valueTreeState, "splitKey", keyboardSplitSlider));
 
     setSize (600, 100);
 }
@@ -53,17 +53,6 @@ void NesPluginAudioProcessorEditor::paint (Graphics& g)
 
 void NesPluginAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
-    gainLabel.setBounds(10, 10, 90, 20);
-    gainSlider.setBounds(100, 10, getWidth() - 110, 20);
-
     keyboardSplitLabel.setBounds(10, 40, 90, 20);
     keyboardSplitSlider.setBounds(100, 40, getWidth() - 110, 20);
-}
-
-void NesPluginAudioProcessorEditor::sliderValueChanged(Slider *slider)
-{
-    processor.setMasterGain(gainSlider.getValue());
-    processor.setSplitKey(keyboardSplitSlider.getValue());
 }

@@ -20,6 +20,7 @@ NesPluginAudioProcessorEditor::NesPluginAudioProcessorEditor (NesPluginAudioProc
     addAndMakeVisible(keyboardSplitLabel);
 
     addAndMakeVisible(keyboardSplitSlider);
+    keyboardSplitSlider.setTextBoxIsEditable(false);
     keyboardSplitSlider.setNumDecimalPlacesToDisplay(0);
     keyboardSplitAttachment.reset (new SliderAttachment (valueTreeState, "splitKey", keyboardSplitSlider));
 

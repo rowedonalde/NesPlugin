@@ -11,6 +11,7 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "NesPluginWidgets.h"
 #include "PluginProcessor.h"
 
 //==============================================================================
@@ -33,7 +34,7 @@ private:
     NesPluginAudioProcessor& processor;
 
     AudioProcessorValueTreeState& valueTreeState;
-    Slider keyboardSplitSlider;
+    MidiNoteSlider keyboardSplitSlider;
     Label keyboardSplitLabel;
     typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
     std::unique_ptr<SliderAttachment> keyboardSplitAttachment;

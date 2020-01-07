@@ -22,7 +22,8 @@
 NesPluginAudioProcessor::NesPluginAudioProcessor()
     : parameters(*this, nullptr, Identifier ("NesPlugin"),
                  {
-                     std::make_unique<AudioParameterInt>("splitKey", "Split Key", 0, 127, 60)
+                     std::make_unique<AudioParameterInt>("splitKey", "Split Key", 0, 127, 60),
+                     std::make_unique<AudioParameterInt>("triangleWaveOctavesUp", "Triangle Wave Octaves Up", -5, 5, 2)
                  })
 #ifndef JucePlugin_PreferredChannelConfigurations
      , AudioProcessor (BusesProperties()
@@ -40,6 +41,12 @@ NesPluginAudioProcessor::NesPluginAudioProcessor()
     previousSplitKey = *splitKeyParameter;
     triangleSound = new NesTriangleWaveSound(*splitKeyParameter);
     pwmSound = new NesPwmSound(*splitKeyParameter);
+
+    triangleWaveOctavesUpParameter = parameters.getRawParameterValue ("triangleWaveOctavesUp");
+
+    previousTriangleWaveOctavesUp = *triangleWaveOctavesUpParameter;
+    triangleVoice = new NesTriangleWaveVoice();
+    triangleVoice->setOctavesUp(*triangleWaveOctavesUpParameter);
 }
 
 NesPluginAudioProcessor::~NesPluginAudioProcessor()
@@ -114,7 +121,7 @@ void NesPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     // Set up synth:
     for (auto i = 0; i < 1; i++)
     {
-        synth.addVoice (new NesTriangleWaveVoice());
+        synth.addVoice (triangleVoice);
 
         synth.addVoice (new NesPwmVoice());
         synth.addVoice (new NesPwmVoice());
@@ -170,6 +177,14 @@ void NesPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
         triangleSound->setSplitKey(currentSplitKey);
         pwmSound->setSplitKey(currentSplitKey);
         previousSplitKey = currentSplitKey;
+    }
+
+    int currentTriangleWaveOctavesUp = *triangleWaveOctavesUpParameter;
+
+    if (currentTriangleWaveOctavesUp != previousTriangleWaveOctavesUp)
+    {
+        triangleVoice->setOctavesUp(currentTriangleWaveOctavesUp);
+        previousTriangleWaveOctavesUp = currentTriangleWaveOctavesUp;
     }
 
     synth.renderNextBlock(buffer, midiMessages, audioSourceChannelInfo.startSample, buffer.getNumSamples());

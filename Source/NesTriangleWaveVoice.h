@@ -30,8 +30,11 @@ public:
 
     void renderNextBlock (AudioSampleBuffer& outputBuffer, int startSample, int numSamples) override;
 
+    void setOctavesUp (int octavesUp);
+
 private:
     double level = 0.0;
     bool makeSound = false;
+    double pitchMultiplier;
     NesTriangleGenerator nesTriangleGenerator;
 };

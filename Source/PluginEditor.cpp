@@ -24,6 +24,13 @@ NesPluginAudioProcessorEditor::NesPluginAudioProcessorEditor (NesPluginAudioProc
     keyboardSplitSlider.setNumDecimalPlacesToDisplay(0);
     keyboardSplitAttachment.reset (new SliderAttachment (valueTreeState, "splitKey", keyboardSplitSlider));
 
+    triangleWaveOctavesUpLabel.setText("Triangle Wave Octave", dontSendNotification);
+    addAndMakeVisible(triangleWaveOctavesUpLabel);
+
+    addAndMakeVisible(triangleWaveOctavesUpSlider);
+    triangleWaveOctavesUpSlider.setNumDecimalPlacesToDisplay(0);
+    triangleWaveOctavesUpAttachment.reset (new SliderAttachment (valueTreeState, "triangleWaveOctavesUp", triangleWaveOctavesUpSlider));
+
     setSize (600, 100);
 }
 
@@ -42,4 +49,7 @@ void NesPluginAudioProcessorEditor::resized()
 {
     keyboardSplitLabel.setBounds(10, 40, 90, 20);
     keyboardSplitSlider.setBounds(100, 40, getWidth() - 110, 20);
+
+    triangleWaveOctavesUpLabel.setBounds(10, 70, 200, 20);
+    triangleWaveOctavesUpSlider.setBounds(210, 70, getWidth() - 220, 20);
 }

@@ -34,10 +34,16 @@ private:
     NesPluginAudioProcessor& processor;
 
     AudioProcessorValueTreeState& valueTreeState;
+    typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+
     MidiNoteSlider keyboardSplitSlider;
     Label keyboardSplitLabel;
-    typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
     std::unique_ptr<SliderAttachment> keyboardSplitAttachment;
+
+    Slider triangleWaveOctavesUpSlider;
+    Label triangleWaveOctavesUpLabel;
+    std::unique_ptr<SliderAttachment> triangleWaveOctavesUpAttachment;
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NesPluginAudioProcessorEditor)
 };

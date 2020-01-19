@@ -5,6 +5,16 @@
               version="0.1.0" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="HSKNKb" name="NesPlugin">
     <GROUP id="{42B85515-5C6F-4FFD-BDC5-00B02FC8E048}" name="Source">
+      <FILE id="LxxiM8" name="NesNoiseSound.cpp" compile="1" resource="0"
+            file="Source/NesNoiseSound.cpp"/>
+      <FILE id="q9Uu42" name="NesNoiseSound.h" compile="0" resource="0" file="Source/NesNoiseSound.h"/>
+      <FILE id="vU3gjM" name="NesNoiseVoice.cpp" compile="1" resource="0"
+            file="Source/NesNoiseVoice.cpp"/>
+      <FILE id="najQR8" name="NesNoiseVoice.h" compile="0" resource="0" file="Source/NesNoiseVoice.h"/>
+      <FILE id="hT2gZY" name="NesNoiseGenerator.cpp" compile="1" resource="0"
+            file="Source/NesNoiseGenerator.cpp"/>
+      <FILE id="ELC5ZQ" name="NesNoiseGenerator.h" compile="0" resource="0"
+            file="Source/NesNoiseGenerator.h"/>
       <FILE id="KSWw3E" name="NesPluginWidgets.cpp" compile="1" resource="0"
             file="Source/NesPluginWidgets.cpp"/>
       <FILE id="vsoZZM" name="NesPluginWidgets.h" compile="0" resource="0"

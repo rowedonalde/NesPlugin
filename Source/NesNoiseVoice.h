@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    NesTriangleWaveVoice.h
-    Created: 1 Sep 2019 10:41:52pm
+    NesNoiseVoice.h
+    Created: 9 Jan 2020 10:18:23pm
     Author:  Donald Rowe
 
   ==============================================================================
@@ -10,15 +10,17 @@
 
 #pragma once
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "NesTriangleGenerator.h"
+#define NUM_NOISE_FREQUENCIES 16
 
-struct NesTriangleWaveVoice : public SynthesiserVoice
+#include "../JuceLibraryCode/JuceHeader.h"
+#include "NesNoiseGenerator.h"
+
+struct NesNoiseVoice : public SynthesiserVoice
 {
 public:
-    NesTriangleWaveVoice();
+    NesNoiseVoice();
 
-    bool canPlaySound (SynthesiserSound* sound) override;
+    bool canPlaySound (SynthesiserSound *) override;
 
     void startNote (int midiNoteNumber, float velocity, SynthesiserSound*, int) override;
 
@@ -30,12 +32,8 @@ public:
 
     void renderNextBlock (AudioSampleBuffer& outputBuffer, int startSample, int numSamples) override;
 
-    void setOctavesUp (int octavesUp);
-
 private:
-    // XXX Maybe eliminate level? unused?
-    double level = 0.0;
     bool makeSound = false;
-    double pitchMultiplier;
-    NesTriangleGenerator nesTriangleGenerator;
+    NesNoiseGenerator nesNoiseGenerator;
+    static const double NOISE_FREQUENCIES[NUM_NOISE_FREQUENCIES];
 };

@@ -17,7 +17,8 @@ NesTriangleWaveSound::NesTriangleWaveSound(int playNotesLessThan)
 
 bool NesTriangleWaveSound::appliesToNote(int midiNoteNumber)
 {
-    return midiNoteNumber < playNotesLessThan;
+    // The furthest left of the keyboard is used for the noise generator:
+    return midiNoteNumber >= MIN_TRIANGLE_MIDI_NOTE && midiNoteNumber < playNotesLessThan;
 }
 
 bool NesTriangleWaveSound::appliesToChannel(int)

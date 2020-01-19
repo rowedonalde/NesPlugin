@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    NesTriangleWaveSound.h
-    Created: 1 Sep 2019 10:56:47pm
+    NesNoiseSound.h
+    Created: 9 Jan 2020 10:18:44pm
     Author:  Donald Rowe
 
   ==============================================================================
@@ -10,20 +10,15 @@
 
 #pragma once
 
-#define MIN_TRIANGLE_MIDI_NOTE 16
+#define MAX_NOISE_MIDI_NOTE 15
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-struct NesTriangleWaveSound : public SynthesiserSound
+struct NesNoiseSound : public SynthesiserSound
 {
 public:
-    NesTriangleWaveSound(int playNotesLessThan);
+    NesNoiseSound();
 
     bool appliesToNote (int midiNoteNumber) override;
     bool appliesToChannel (int) override;
-
-    void setSplitKey(int midiNoteNumber);
-
-private:
-    int playNotesLessThan;
 };

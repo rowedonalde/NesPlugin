@@ -10,13 +10,12 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "NesPwmGenerator.h"
+#include "NesNoiseSound.h"
+#include "NesNoiseVoice.h"
 #include "NesPwmVoice.h"
 #include "NesPwmSound.h"
-#include "NesTriangleGenerator.h"
 #include "NesTriangleWaveVoice.h"
 #include "NesTriangleWaveSound.h"
-#include "SampleGenerator.h"
 
 //==============================================================================
 NesPluginAudioProcessor::NesPluginAudioProcessor()
@@ -125,10 +124,13 @@ void NesPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
         synth.addVoice (new NesPwmVoice());
         synth.addVoice (new NesPwmVoice());
+
+        synth.addVoice (new NesNoiseVoice());
     }
 
     synth.addSound (triangleSound);
     synth.addSound (pwmSound);
+    synth.addSound (new NesNoiseSound());
 
     synth.setCurrentPlaybackSampleRate (sampleRate);
 }

@@ -17,10 +17,15 @@ NesNoiseSound::NesNoiseSound()
 
 bool NesNoiseSound::appliesToNote(int midiNoteNumber)
 {
-    return midiNoteNumber <= MAX_NOISE_MIDI_NOTE;
+    return isActive && midiNoteNumber <= MAX_NOISE_MIDI_NOTE;
 }
 
 bool NesNoiseSound::appliesToChannel(int)
 {
     return true;
+}
+
+void NesNoiseSound::setActive(bool active)
+{
+    isActive = active;
 }

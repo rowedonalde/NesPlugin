@@ -28,7 +28,6 @@ public:
     void resized() override;
 
 private:
-    //void sliderValueChanged (Slider* slider) override;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     NesPluginAudioProcessor& processor;
@@ -44,6 +43,9 @@ private:
     Slider triangleWaveOctavesUpSlider;
     Label triangleWaveOctavesUpLabel;
     std::unique_ptr<SliderAttachment> triangleWaveOctavesUpAttachment;
+
+    ToggleButton noiseGeneratorActiveToggleButton;
+    std::unique_ptr<ButtonAttachment> noiseGeneratorActiveAttachment;
 
     ToggleButton noiseModeToggleButton;
     std::unique_ptr<ButtonAttachment> noiseModeAttachment;

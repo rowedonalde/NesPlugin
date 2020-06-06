@@ -23,6 +23,7 @@ NesPluginAudioProcessor::NesPluginAudioProcessor()
                  {
                      std::make_unique<AudioParameterInt>("splitKey", "Split Key", 0, 127, 60),
                      std::make_unique<AudioParameterInt>("triangleWaveOctavesUp", "Triangle Wave Octaves Up", -5, 5, 2),
+                     std::make_unique<AudioParameterBool>("noiseGeneratorActive", "Noise Generator Active", true),
                      std::make_unique<AudioParameterBool>("noiseMode", "Noise Mode", false)
                  })
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -39,6 +40,7 @@ NesPluginAudioProcessor::NesPluginAudioProcessor()
     splitKeyParameter = parameters.getRawParameterValue ("splitKey");
 
     previousSplitKey = *splitKeyParameter;
+    noiseSound = new NesNoiseSound();
     triangleSound = new NesTriangleWaveSound(*splitKeyParameter);
     pwmSound = new NesPwmSound(*splitKeyParameter);
 
@@ -48,9 +50,15 @@ NesPluginAudioProcessor::NesPluginAudioProcessor()
     triangleVoice = new NesTriangleWaveVoice();
     triangleVoice->setOctavesUp(*triangleWaveOctavesUpParameter);
 
+    noiseGeneratorActiveParameter = parameters.getRawParameterValue("noiseGeneratorActive");
+    previousNoiseGeneratorActive = *noiseGeneratorActiveParameter > 0.5;
+
     noiseModeParameter = parameters.getRawParameterValue("noiseMode");
+    previousNoiseMode = *noiseModeParameter > 0.5;
+
     noiseVoice = new NesNoiseVoice();
-    noiseVoice->setNoiseMode(*noiseModeParameter > 0.5);
+    noiseSound->setActive(previousNoiseGeneratorActive);
+    noiseVoice->setNoiseMode(previousNoiseMode);
 }
 
 NesPluginAudioProcessor::~NesPluginAudioProcessor()
@@ -135,7 +143,7 @@ void NesPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
     synth.addSound (triangleSound);
     synth.addSound (pwmSound);
-    synth.addSound (new NesNoiseSound());
+    synth.addSound (noiseSound);
 
     synth.setCurrentPlaybackSampleRate (sampleRate);
 }
@@ -192,6 +200,14 @@ void NesPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     {
         triangleVoice->setOctavesUp(currentTriangleWaveOctavesUp);
         previousTriangleWaveOctavesUp = currentTriangleWaveOctavesUp;
+    }
+
+    bool currentNoiseGeneratorActive = *noiseGeneratorActiveParameter > 0.5;
+
+    if (currentNoiseGeneratorActive != previousNoiseGeneratorActive)
+    {
+        noiseSound->setActive(currentNoiseGeneratorActive);
+        previousNoiseGeneratorActive = currentNoiseGeneratorActive;
     }
 
     bool currentNoiseMode = *noiseModeParameter > 0.5;

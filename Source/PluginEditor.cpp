@@ -31,6 +31,11 @@ NesPluginAudioProcessorEditor::NesPluginAudioProcessorEditor (NesPluginAudioProc
     triangleWaveOctavesUpSlider.setNumDecimalPlacesToDisplay(0);
     triangleWaveOctavesUpAttachment.reset (new SliderAttachment (valueTreeState, "triangleWaveOctavesUp", triangleWaveOctavesUpSlider));
 
+    noiseGeneratorActiveToggleButton.setButtonText("Noise generator");
+    noiseGeneratorActiveToggleButton.changeWidthToFitText();
+    addAndMakeVisible(noiseGeneratorActiveToggleButton);
+    noiseGeneratorActiveAttachment.reset (new ButtonAttachment (valueTreeState, "noiseGeneratorActive", noiseGeneratorActiveToggleButton));
+
     noiseModeToggleButton.setButtonText("Fast noise mode");
     noiseModeToggleButton.changeWidthToFitText();
     addAndMakeVisible(noiseModeToggleButton);
@@ -58,5 +63,6 @@ void NesPluginAudioProcessorEditor::resized()
     triangleWaveOctavesUpLabel.setBounds(10, 70, 200, 20);
     triangleWaveOctavesUpSlider.setBounds(210, 70, getWidth() - 220, 20);
 
-    noiseModeToggleButton.setBounds(10, 100, 200, 20);
+    noiseGeneratorActiveToggleButton.setBounds(10, 100, 200, 20);
+    noiseModeToggleButton.setBounds(10, 130, 200, 20);
 }

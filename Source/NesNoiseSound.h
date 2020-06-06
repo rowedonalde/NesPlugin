@@ -21,4 +21,8 @@ public:
 
     bool appliesToNote (int midiNoteNumber) override;
     bool appliesToChannel (int) override;
+    void setActive (bool active);
+
+private:
+    bool isActive = true;
 };

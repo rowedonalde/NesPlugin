@@ -22,8 +22,10 @@ public:
     bool appliesToNote (int midiNoteNumber) override;
     bool appliesToChannel (int) override;
 
-    void setSplitKey(int midiNoteNumber);
+    void setSplitKey (int midiNoteNumber);
+    void setNoiseChannelActive (bool active);
 
 private:
     int playNotesLessThan;
+    bool noiseChannelActive;
 };

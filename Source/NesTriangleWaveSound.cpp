@@ -17,8 +17,13 @@ NesTriangleWaveSound::NesTriangleWaveSound(int playNotesLessThan)
 
 bool NesTriangleWaveSound::appliesToNote(int midiNoteNumber)
 {
-    // The furthest left of the keyboard is used for the noise generator:
-    return midiNoteNumber >= MIN_TRIANGLE_MIDI_NOTE && midiNoteNumber < playNotesLessThan;
+    if (noiseChannelActive)
+    {
+        // The furthest left of the keyboard is used for the noise generator:
+        return midiNoteNumber >= MIN_TRIANGLE_MIDI_NOTE && midiNoteNumber < playNotesLessThan;
+    }
+
+    return midiNoteNumber < playNotesLessThan;
 }
 
 bool NesTriangleWaveSound::appliesToChannel(int)
@@ -29,4 +34,13 @@ bool NesTriangleWaveSound::appliesToChannel(int)
 void NesTriangleWaveSound::setSplitKey(int midiNoteNumber)
 {
     playNotesLessThan = midiNoteNumber;
+}
+
+// Indicate whether the noise channel is active.
+// If the noise channel is active, don't play the triangle wave
+// on the furthest left keys since the noise channel is using them.
+// Otherwise, use the whole left side of the keyboard for the triangle wave.
+void NesTriangleWaveSound::setNoiseChannelActive(bool active)
+{
+    noiseChannelActive = active;
 }

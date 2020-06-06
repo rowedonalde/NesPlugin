@@ -58,6 +58,7 @@ NesPluginAudioProcessor::NesPluginAudioProcessor()
 
     noiseVoice = new NesNoiseVoice();
     noiseSound->setActive(previousNoiseGeneratorActive);
+    triangleSound->setNoiseChannelActive(previousNoiseGeneratorActive);
     noiseVoice->setNoiseMode(previousNoiseMode);
 }
 
@@ -207,6 +208,7 @@ void NesPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     if (currentNoiseGeneratorActive != previousNoiseGeneratorActive)
     {
         noiseSound->setActive(currentNoiseGeneratorActive);
+        triangleSound->setNoiseChannelActive(currentNoiseGeneratorActive);
         previousNoiseGeneratorActive = currentNoiseGeneratorActive;
     }
 

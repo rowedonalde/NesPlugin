@@ -32,6 +32,8 @@ public:
 
     void renderNextBlock (AudioSampleBuffer& outputBuffer, int startSample, int numSamples) override;
 
+    void setNoiseMode (bool noiseMode);
+
 private:
     bool makeSound = false;
     NesNoiseGenerator nesNoiseGenerator;

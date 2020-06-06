@@ -22,7 +22,8 @@ NesPluginAudioProcessor::NesPluginAudioProcessor()
     : parameters(*this, nullptr, Identifier ("NesPlugin"),
                  {
                      std::make_unique<AudioParameterInt>("splitKey", "Split Key", 0, 127, 60),
-                     std::make_unique<AudioParameterInt>("triangleWaveOctavesUp", "Triangle Wave Octaves Up", -5, 5, 2)
+                     std::make_unique<AudioParameterInt>("triangleWaveOctavesUp", "Triangle Wave Octaves Up", -5, 5, 2),
+                     std::make_unique<AudioParameterBool>("noiseMode", "Noise Mode", false)
                  })
 #ifndef JucePlugin_PreferredChannelConfigurations
      , AudioProcessor (BusesProperties()
@@ -46,6 +47,10 @@ NesPluginAudioProcessor::NesPluginAudioProcessor()
     previousTriangleWaveOctavesUp = *triangleWaveOctavesUpParameter;
     triangleVoice = new NesTriangleWaveVoice();
     triangleVoice->setOctavesUp(*triangleWaveOctavesUpParameter);
+
+    noiseModeParameter = parameters.getRawParameterValue("noiseMode");
+    noiseVoice = new NesNoiseVoice();
+    noiseVoice->setNoiseMode(*noiseModeParameter > 0.5);
 }
 
 NesPluginAudioProcessor::~NesPluginAudioProcessor()
@@ -125,7 +130,7 @@ void NesPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
         synth.addVoice (new NesPwmVoice());
         synth.addVoice (new NesPwmVoice());
 
-        synth.addVoice (new NesNoiseVoice());
+        synth.addVoice (noiseVoice);
     }
 
     synth.addSound (triangleSound);
@@ -187,6 +192,14 @@ void NesPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     {
         triangleVoice->setOctavesUp(currentTriangleWaveOctavesUp);
         previousTriangleWaveOctavesUp = currentTriangleWaveOctavesUp;
+    }
+
+    bool currentNoiseMode = *noiseModeParameter > 0.5;
+
+    if (currentNoiseMode != previousNoiseMode)
+    {
+        noiseVoice->setNoiseMode(currentNoiseMode);
+        previousNoiseMode = currentNoiseMode;
     }
 
     synth.renderNextBlock(buffer, midiMessages, audioSourceChannelInfo.startSample, buffer.getNumSamples());

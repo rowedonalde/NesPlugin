@@ -35,6 +35,7 @@ private:
 
     AudioProcessorValueTreeState& valueTreeState;
     typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+    typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
 
     MidiNoteSlider keyboardSplitSlider;
     Label keyboardSplitLabel;
@@ -44,6 +45,8 @@ private:
     Label triangleWaveOctavesUpLabel;
     std::unique_ptr<SliderAttachment> triangleWaveOctavesUpAttachment;
 
+    ToggleButton noiseModeToggleButton;
+    std::unique_ptr<ButtonAttachment> noiseModeAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NesPluginAudioProcessorEditor)
 };

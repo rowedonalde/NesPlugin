@@ -80,3 +80,8 @@ void NesNoiseVoice::renderNextBlock(AudioSampleBuffer &outputBuffer, int startSa
         }
     }
 }
+
+void NesNoiseVoice::setNoiseMode(bool noiseMode)
+{
+    nesNoiseGenerator.setShiftRegisterShortMode (noiseMode);
+}

@@ -57,3 +57,8 @@ void NesNoiseGenerator::setFrequency(double frequency)
     // i.e., Hz subdivided into samples:
     cyclesPerSample = frequency / sampleRate;
 }
+
+void NesNoiseGenerator::setShiftRegisterShortMode(bool mode)
+{
+    shiftRegisterShortMode = mode;
+}

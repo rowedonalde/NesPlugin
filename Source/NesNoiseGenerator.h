@@ -25,6 +25,7 @@ public:
     NesNoiseGenerator (double sampleRate);
     float getNextSample() override;
     void setFrequency (double frequency) override;
+    void setShiftRegisterShortMode (bool mode);
 
 private:
     void advanceRegister();
@@ -52,5 +53,5 @@ private:
     // TODO: This should be dynamic;
     float gain = 0.25f;
 
-    bool shiftRegisterShortMode = true;
+    bool shiftRegisterShortMode = false;
 };

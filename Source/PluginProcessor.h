@@ -11,6 +11,7 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "NesNoiseVoice.h"
 #include "NesTriangleWaveSound.h"
 #include "NesTriangleWaveVoice.h"
 #include "NesPwmSound.h"
@@ -69,12 +70,19 @@ private:
     // can shift the octave up and down:
     NesTriangleWaveVoice* triangleVoice;
 
+    NesNoiseVoice* noiseVoice;
+
     int previousSplitKey;
     int previousTriangleWaveOctavesUp;
+    bool previousNoiseMode;
     double masterGain = 0.0;
 
     float* splitKeyParameter = nullptr;
     float* triangleWaveOctavesUpParameter = nullptr;
+
+    // This represents a bool where false is 0.0 and true is 1.0.
+    // Should convert with a >0.5 comparison.
+    float* noiseModeParameter = nullptr;
 
     Synthesiser synth;
     //==============================================================================

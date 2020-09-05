@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="GeKIoY" name="NesPlugin" projectType="audioplug" jucerVersion="5.4.4"
+<JUCERPROJECT id="GeKIoY" name="Famikondo" projectType="audioplug" jucerVersion="5.4.4"
               pluginFormats="buildAU,buildVST3" companyName="A-Frame Personal Electronics"
               version="0.1.0" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
-  <MAINGROUP id="HSKNKb" name="NesPlugin">
+  <MAINGROUP id="HSKNKb" name="Famikondo">
     <GROUP id="{42B85515-5C6F-4FFD-BDC5-00B02FC8E048}" name="Source">
       <FILE id="LxxiM8" name="NesNoiseSound.cpp" compile="1" resource="0"
             file="Source/NesNoiseSound.cpp"/>

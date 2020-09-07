@@ -79,13 +79,13 @@ private:
     bool previousNoiseMode;
     double masterGain = 0.0;
 
-    float* splitKeyParameter = nullptr;
-    float* triangleWaveOctavesUpParameter = nullptr;
+    std::atomic<float>* splitKeyParameter = nullptr;
+    std::atomic<float>* triangleWaveOctavesUpParameter = nullptr;
 
     // Thess represent bools where false is 0.0 and true is 1.0.
     // Should convert with a >0.5 comparison.
-    float* noiseGeneratorActiveParameter = nullptr;
-    float* noiseModeParameter = nullptr;
+    std::atomic<float>* noiseGeneratorActiveParameter = nullptr;
+    std::atomic<float>* noiseModeParameter = nullptr;
 
     Synthesiser synth;
     //==============================================================================

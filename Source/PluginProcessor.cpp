@@ -19,42 +19,44 @@
 
 //==============================================================================
 NesPluginAudioProcessor::NesPluginAudioProcessor()
-    : parameters(*this, nullptr, Identifier ("NesPlugin"),
-                 {
-                     std::make_unique<AudioParameterInt>("splitKey", "Split Key", 0, 127, 60),
-                     std::make_unique<AudioParameterInt>("triangleWaveOctavesUp", "Triangle Wave Octaves Up", -5, 5, 2),
-                     std::make_unique<AudioParameterBool>("noiseGeneratorActive", "Noise Generator Active", true),
-                     std::make_unique<AudioParameterBool>("noiseMode", "Noise Mode", false)
-                 })
+    :
 #ifndef JucePlugin_PreferredChannelConfigurations
-     , AudioProcessor (BusesProperties()
+    AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  AudioChannelSet::stereo(), true)
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
 #endif
+     parameters(*this, nullptr, Identifier ("NesPlugin"),
+                 {
+                     std::make_unique<AudioParameterInt>("splitKey", "Split Key", 0, 127, 60),
+                     std::make_unique<AudioParameterInt>("triangleWaveOctavesUp", "Triangle Wave Octaves Up", -5, 5, 2),
+                     std::make_unique<AudioParameterBool>("noiseGeneratorActive", "Noise Generator Active", true),
+                     std::make_unique<AudioParameterBool>("noiseMode", "Noise Mode", false)
+                 })
+
 {
     splitKeyParameter = parameters.getRawParameterValue ("splitKey");
 
-    previousSplitKey = *splitKeyParameter;
+    previousSplitKey = splitKeyParameter->load();
     noiseSound = new NesNoiseSound();
     triangleSound = new NesTriangleWaveSound(*splitKeyParameter);
     pwmSound = new NesPwmSound(*splitKeyParameter);
 
     triangleWaveOctavesUpParameter = parameters.getRawParameterValue ("triangleWaveOctavesUp");
 
-    previousTriangleWaveOctavesUp = *triangleWaveOctavesUpParameter;
+    previousTriangleWaveOctavesUp = triangleWaveOctavesUpParameter->load();
     triangleVoice = new NesTriangleWaveVoice();
     triangleVoice->setOctavesUp(*triangleWaveOctavesUpParameter);
 
     noiseGeneratorActiveParameter = parameters.getRawParameterValue("noiseGeneratorActive");
-    previousNoiseGeneratorActive = *noiseGeneratorActiveParameter > 0.5;
+    previousNoiseGeneratorActive = noiseGeneratorActiveParameter->load() > 0.5;
 
     noiseModeParameter = parameters.getRawParameterValue("noiseMode");
-    previousNoiseMode = *noiseModeParameter > 0.5;
+    previousNoiseMode = noiseModeParameter->load() > 0.5;
 
     noiseVoice = new NesNoiseVoice();
     noiseSound->setActive(previousNoiseGeneratorActive);

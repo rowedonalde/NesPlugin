@@ -13,6 +13,12 @@
 class SampleGenerator
 {
 public:
+    virtual ~SampleGenerator() = 0;
     virtual float getNextSample() = 0;
     virtual void setFrequency (double frequency) = 0;
 };
+
+inline SampleGenerator::~SampleGenerator()
+{
+
+}

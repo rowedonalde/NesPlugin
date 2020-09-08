@@ -39,29 +39,27 @@ NesPluginAudioProcessor::NesPluginAudioProcessor()
                  })
 
 {
+    // Load split point between triangle and PWM:
     splitKeyParameter = parameters.getRawParameterValue ("splitKey");
-
     previousSplitKey = splitKeyParameter->load();
+
+    // Initialize sounds:
     noiseSound = new NesNoiseSound();
     triangleSound = new NesTriangleWaveSound(*splitKeyParameter);
     pwmSound = new NesPwmSound(*splitKeyParameter);
 
+    // Load octave for triangle waves:
     triangleWaveOctavesUpParameter = parameters.getRawParameterValue ("triangleWaveOctavesUp");
-
     previousTriangleWaveOctavesUp = triangleWaveOctavesUpParameter->load();
-    triangleVoice = new NesTriangleWaveVoice();
-    triangleVoice->setOctavesUp(*triangleWaveOctavesUpParameter);
 
+    // Load noise mode settings:
     noiseGeneratorActiveParameter = parameters.getRawParameterValue("noiseGeneratorActive");
     previousNoiseGeneratorActive = noiseGeneratorActiveParameter->load() > 0.5;
+    noiseSound->setActive(previousNoiseGeneratorActive);
+    triangleSound->setNoiseChannelActive(previousNoiseGeneratorActive);
 
     noiseModeParameter = parameters.getRawParameterValue("noiseMode");
     previousNoiseMode = noiseModeParameter->load() > 0.5;
-
-    noiseVoice = new NesNoiseVoice();
-    noiseSound->setActive(previousNoiseGeneratorActive);
-    triangleSound->setNoiseChannelActive(previousNoiseGeneratorActive);
-    noiseVoice->setNoiseMode(previousNoiseMode);
 }
 
 NesPluginAudioProcessor::~NesPluginAudioProcessor()
@@ -133,16 +131,17 @@ void NesPluginAudioProcessor::changeProgramName (int index, const String& newNam
 //==============================================================================
 void NesPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Set up synth:
-    for (auto i = 0; i < 1; i++)
-    {
-        synth.addVoice (triangleVoice);
+    // Set up synth
+    // Initialize octave and noise mode settings here since the
+    // respective voices need to be added to the synth first:
+    synth.addVoice (new NesTriangleWaveVoice());
+    synth.setTriangleOctavesUp (previousTriangleWaveOctavesUp);
 
-        synth.addVoice (new NesPwmVoice());
-        synth.addVoice (new NesPwmVoice());
+    synth.addVoice (new NesPwmVoice());
+    synth.addVoice (new NesPwmVoice());
 
-        synth.addVoice (noiseVoice);
-    }
+    synth.addVoice (new NesNoiseVoice());
+    synth.setNoiseMode (previousNoiseMode);
 
     synth.addSound (triangleSound);
     synth.addSound (pwmSound);
@@ -201,7 +200,9 @@ void NesPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
 
     if (currentTriangleWaveOctavesUp != previousTriangleWaveOctavesUp)
     {
-        triangleVoice->setOctavesUp(currentTriangleWaveOctavesUp);
+        // Delegate through the synth since maintaining a
+        // pointer to the voice becomes problematic:
+        synth.setTriangleOctavesUp(currentTriangleWaveOctavesUp);
         previousTriangleWaveOctavesUp = currentTriangleWaveOctavesUp;
     }
 
@@ -218,7 +219,9 @@ void NesPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
 
     if (currentNoiseMode != previousNoiseMode)
     {
-        noiseVoice->setNoiseMode(currentNoiseMode);
+        // Delegate through the synth since maintaining a
+        // pointer to the voice becomes problematic:
+        synth.setNoiseMode(currentNoiseMode);
         previousNoiseMode = currentNoiseMode;
     }
 

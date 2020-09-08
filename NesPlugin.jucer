@@ -39,6 +39,10 @@
             file="Source/NesTriangleGenerator.cpp"/>
       <FILE id="KPGx9h" name="NesTriangleGenerator.h" compile="0" resource="0"
             file="Source/NesTriangleGenerator.h"/>
+      <FILE id="H52tN8" name="NesSynthesizer.cpp" compile="1" resource="0"
+            file="Source/NesSynthesizer.cpp"/>
+      <FILE id="SFBAfv" name="NesSynthesizer.h" compile="0" resource="0"
+            file="Source/NesSynthesizer.h"/>
       <FILE id="MTQrFx" name="SampleGenerator.h" compile="0" resource="0"
             file="Source/SampleGenerator.h"/>
       <FILE id="I3Y5U9" name="PluginProcessor.cpp" compile="1" resource="0"

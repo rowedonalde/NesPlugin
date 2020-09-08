@@ -16,6 +16,7 @@
 #include "NesTriangleWaveSound.h"
 #include "NesTriangleWaveVoice.h"
 #include "NesPwmSound.h"
+#include "NesSynthesizer.h"
 #include "SampleGenerator.h"
 
 //==============================================================================
@@ -68,11 +69,6 @@ private:
     NesTriangleWaveSound* triangleSound;
     NesPwmSound* pwmSound;
 
-    // Keep a handle on the triangle voice specifically so we
-    // can shift the octave up and down:
-    NesNoiseVoice* noiseVoice;
-    NesTriangleWaveVoice* triangleVoice;
-
     int previousSplitKey;
     int previousTriangleWaveOctavesUp;
     bool previousNoiseGeneratorActive;
@@ -87,7 +83,7 @@ private:
     std::atomic<float>* noiseGeneratorActiveParameter = nullptr;
     std::atomic<float>* noiseModeParameter = nullptr;
 
-    Synthesiser synth;
+    NesSynthesizer synth;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NesPluginAudioProcessor)
 };

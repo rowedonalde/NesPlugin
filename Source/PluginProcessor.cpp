@@ -30,7 +30,7 @@ NesPluginAudioProcessor::NesPluginAudioProcessor()
                      #endif
                        ),
 #endif
-     parameters(*this, nullptr, Identifier ("NesPlugin"),
+     parameters(*this, nullptr, Identifier ("Famikondo"),
                  {
                      std::make_unique<AudioParameterInt>("splitKey", "Split Key", 0, 127, 60),
                      std::make_unique<AudioParameterInt>("triangleWaveOctavesUp", "Triangle Wave Octaves Up", -5, 5, 2),
